@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>node-YouTubeStreamer</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="live.html">
+                live.js
+              </a>
+            
+              
+              <a class="source" href="normal.html">
+                normal.js
+              </a>
+            
+              
+              <a class="source" href="server.html">
+                server.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>node-YouTubeStreamer</h1>
+<p><em>by Licson Lee <a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#108;&#105;&#x63;&#115;&#x6f;&#110;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#108;&#105;&#x63;&#115;&#x6f;&#110;&#x40;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a></em></p>
+<p>This is the live streaming module for node-YouTubeStreamer.</p>
+<p>Require the libraries needed.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> m3u8 = require(<span class="string">'m3u8'</span>);
+<span class="keyword">var</span> request = require(<span class="string">'request'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Here&#39;s our live stream handler.
+Currently only works with finished live streams</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>module.exports = <span class="keyword">function</span>(data,res){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Create a M3U parser instance.
+YouTube lists all possible streams in a M3U container.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="keyword">var</span> parser = m3u8.createStream();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>The selected stream</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="keyword">var</span> playlist;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Start piping data into the parser.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	request(data.hlsvp).pipe(parser);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>The streaming function.
+It writes each chunk to the output.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="keyword">var</span> stream = <span class="keyword">function</span>(){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>The selected stream is segmented and each chunk&#39;s location is stored
+in a M3U container.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">var</span> parser = m3u8.createStream();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Start piping data in</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		request(playlist).pipe(parser);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Write the appopriate response</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		res.writeHead(<span class="number">200</span>,{
+			<span class="string">'Content-type'</span>: <span class="string">'video/mp4'</span>
+		});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>When a chunk arrives, send it to the client</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		parser.on(<span class="string">'item'</span>,<span class="keyword">function</span>(item){
+			<span class="keyword">var</span> chunk = String(item.get(<span class="string">'uri'</span>));
+			request(chunk,<span class="keyword">function</span>(err,c_stream,data){
+				<span class="keyword">if</span>(err){
+					<span class="keyword">return</span>;
+				}
+				res.write(data);
+			});
+		});
+	};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Check the available streams
+and select them when ready</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	parser.on(<span class="string">'item'</span>,<span class="keyword">function</span>(item){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Get the quality of each stream</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">var</span> quality = String(item.get(<span class="string">'resolution'</span>)).split(<span class="string">','</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Only choose streams that are not HD
+to save bandwidth</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">if</span>(parseInt(quality[<span class="number">0</span>]) &lt; <span class="number">1280</span> &amp;&amp; parseInt(quality[<span class="number">1</span>]) &lt; <span class="number">720</span> &amp;&amp; !playlist){
+			playlist = String(item.get(<span class="string">'uri'</span>));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Start streaming</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			stream();
+		}
+	});
+};</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

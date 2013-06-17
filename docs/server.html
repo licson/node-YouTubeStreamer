@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>node-YouTubeStreamer</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="live.html">
+                live.js
+              </a>
+            
+              
+              <a class="source" href="normal.html">
+                normal.js
+              </a>
+            
+              
+              <a class="source" href="server.html">
+                server.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1>node-YouTubeStreamer</h1>
+<p><em>by Licson Lee <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#108;&#105;&#99;&#115;&#111;&#110;&#48;&#55;&#x32;&#57;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#109;">&#108;&#105;&#99;&#115;&#111;&#110;&#48;&#55;&#x32;&#57;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#109;</a></em></p>
+<p>Streams YouTube video to clients using a proxy-like implantation.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Load required modules in</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> http = require(<span class="string">'http'</span>);
+<span class="keyword">var</span> request = require(<span class="string">'request'</span>);
+<span class="keyword">var</span> url = require(<span class="string">'url'</span>);
+<span class="keyword">var</span> qs = require(<span class="string">'querystring'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Streaming component</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/** ** THIS IS YOUTUBE LIVE STREAMING COMPONENT (NOT COMPLETED) ** **/</span>
+<span class="keyword">var</span> live = require(<span class="string">'./live.js'</span>);
+<span class="comment">/** ** THIS IS YOUTUBE NORMAL VIDEO STREAMING ** **/</span>
+<span class="keyword">var</span> normal = require(<span class="string">'./normal.js'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>node.js cluster module</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> cluster = require(<span class="string">'cluster'</span>);
+<span class="keyword">var</span> numCPUs = require(<span class="string">'os'</span>).cpus().length;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Where should we listen for requests?</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> IP = process.argv[<span class="number">2</span>] || <span class="string">'127.0.0.1'</span>;
+<span class="keyword">var</span> PORT = Number(process.argv[<span class="number">3</span>] || <span class="number">8000</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>If this is the master process, fork child process</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="keyword">if</span>(cluster.isMaster){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Fork based on the number of CPUs</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; numCPUs; i++) {
+		cluster.fork();
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Check for the child&#39;s states and restart them if died</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	cluster.on(<span class="string">'exit'</span>, <span class="keyword">function</span>(worker, code) {
+		console.log(<span class="string">'Worker '</span> + worker.process.pid + <span class="string">' died with code '</span>+code);
+		cluster.fork();
+	});
+	cluster.on(<span class="string">'online'</span>, <span class="keyword">function</span>(worker) {
+		console.log(<span class="string">'Worker '</span> + worker.process.pid + <span class="string">' is ready!'</span>);
+		cluster.fork();
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>node.js 0.6 compatibility</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	cluster.on(<span class="string">'death'</span>, <span class="keyword">function</span>(worker, code) {
+		console.log(<span class="string">'Worker '</span> + worker.process.pid + <span class="string">' died with code '</span>+code);
+	});
+}
+<span class="keyword">else</span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>We&#39;re in the child process. Start the HTTP server.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="keyword">var</span> server = http.createServer(<span class="keyword">function</span>(req,res){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Get the <code>video ID</code> and <code>video type</code> from the query</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">var</span> data = url.parse(req.url,<span class="literal">true</span>).query;
+		data.type = data.type || <span class="string">'video/mp4'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Let&#39;s make an request to <code>http://www.youtube.com/get_video_info?video_id=&lt;VIDEO_ID_HERE&gt;</code>
+to get some metadata. This is reverse-engineered from the Youtube embed player.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		request(<span class="string">'http://www.youtube.com/get_video_info?video_id='</span>+data.id,<span class="keyword">function</span>(err,d_res,d_content){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Check if there&#39;s any error</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="keyword">if</span>(!err &amp;&amp; d_res.statusCode === <span class="number">200</span>){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>No error happened.
+Start parsing the content of the returned result.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				d_content = qs.parse(d_content);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>If there&#39;s an API error <em>(such as copyright restrictions, video not allowed to embed, etc.)</em>
+end the request with an error message.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="keyword">if</span>(d_content.status.indexOf(<span class="string">'ok'</span>) == -<span class="number">1</span>){
+					res.end(d_content.reason);
+				}
+				<span class="keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>There&#39;s no API errors, start getting information from it.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Log the video&#39;s title</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					console.log(<span class="string">'Requesting video "%s"'</span>,d_content.title);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Check whether the video is a YouTube live stream</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>					<span class="keyword">if</span>((!!d_content.ps) &amp;&amp; d_content.ps == <span class="string">"live"</span>){</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>It&#39;s a live stream, let&#39;s call our live stream handler.
+Tricky things <strong>WILL</strong> happen here.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						live(d_content,res);
+					}
+					<span class="keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>It&#39;s just a normal video, stream it to the client using the conventional approch.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>						normal(data,d_content)(res);
+					}
+				}
+			}
+			<span class="keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>An error happened, end the connection.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				console.log(<span class="string">'Error getting video metadata: '</span>,err);
+				res.end();
+			}
+		});
+	});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Listen on the specified IP and port.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	server.listen(PORT,IP,<span class="keyword">function</span>(){
+		console.log(<span class="string">'Server #%d listening at %s:%d'</span>,process.pid,IP,PORT);
+	});
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
