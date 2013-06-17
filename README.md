@@ -21,3 +21,8 @@ Easy! Just open your media player / browser and load this URL:
 	http://localhost:8000/?id=<YouTube video ID here>&type=<MIME type of the video you want to get>
 
 Then you should see the video loads and the console shows the title of the video being loaded.
+
+Docs
+====================
+
+Documentations are now available! [See it](http://licson0729.github.io/node-YouTubeStreamer/docs/server.html) in action!
