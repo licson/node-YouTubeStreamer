@@ -1,0 +1,8 @@
+*.swp
+.DS_Store
+.idea
+nohup.out
+npm-debug.log
+node_modules
+*.pem
+*.srl
