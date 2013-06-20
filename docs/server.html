@@ -48,7 +48,7 @@
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
               <h1>node-YouTubeStreamer</h1>
-<p><em>by Licson Lee <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#108;&#105;&#99;&#115;&#111;&#110;&#48;&#55;&#x32;&#57;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#109;">&#108;&#105;&#99;&#115;&#111;&#110;&#48;&#55;&#x32;&#57;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#109;</a></em></p>
+<p><em>by Licson Lee <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#x3a;&#108;&#105;&#x63;&#x73;&#111;&#110;&#48;&#55;&#x32;&#57;&#64;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#108;&#105;&#x63;&#x73;&#111;&#110;&#48;&#55;&#x32;&#57;&#64;&#103;&#109;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;</a></em></p>
 <p>Streams YouTube video to clients using a proxy-like implantation.</p>
 
             </div>
@@ -172,7 +172,6 @@
 	});
 	cluster.on(<span class="string">'online'</span>, <span class="keyword">function</span>(worker) {
 		console.log(<span class="string">'Worker '</span> + worker.process.pid + <span class="string">' is ready!'</span>);
-		cluster.fork();
 	});</pre></div></div>
             
         </li>
@@ -190,6 +189,7 @@
             
             <div class="content"><div class='highlight'><pre>	cluster.on(<span class="string">'death'</span>, <span class="keyword">function</span>(worker, code) {
 		console.log(<span class="string">'Worker '</span> + worker.process.pid + <span class="string">' died with code '</span>+code);
+		cluster.fork();
 	});
 }
 <span class="keyword">else</span>{</pre></div></div>

@@ -37,12 +37,12 @@ if(cluster.isMaster){
 	});
 	cluster.on('online', function(worker) {
 		console.log('Worker ' + worker.process.pid + ' is ready!');
-		cluster.fork();
 	});
 	
 	//node.js 0.6 compatibility
 	cluster.on('death', function(worker, code) {
 		console.log('Worker ' + worker.process.pid + ' died with code '+code);
+		cluster.fork();
 	});
 }
 else{

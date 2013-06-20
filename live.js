@@ -1,5 +1,5 @@
 // # node-YouTubeStreamer
-// _by Licson Lee <licson@gmail.com>_
+// _by Licson Lee <licson0729@gmail.com>_
 //
 // This is the live streaming module for node-YouTubeStreamer.
 

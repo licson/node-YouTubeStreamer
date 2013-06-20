@@ -48,14 +48,15 @@
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
               <h1>node-YouTubeStreamer</h1>
-<p><em>by Licson Lee <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#108;&#x69;&#x63;&#x73;&#111;&#x6e;&#64;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#108;&#x69;&#x63;&#x73;&#111;&#x6e;&#64;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;</a></em></p>
+<p><em>by Licson Lee <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x6c;&#105;&#x63;&#115;&#x6f;&#x6e;&#x30;&#x37;&#50;&#57;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;">&#x6c;&#105;&#x63;&#115;&#x6f;&#x6e;&#x30;&#x37;&#50;&#57;&#64;&#x67;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;</a></em></p>
 <p>This is the normal streaming module for node-YouTubeStreamer.</p>
 <p>Require the libraries needed.</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="keyword">var</span> request = require(<span class="string">'request'</span>);
-<span class="keyword">var</span> qs = require(<span class="string">'querystring'</span>);</pre></div></div>
+<span class="keyword">var</span> qs = require(<span class="string">'querystring'</span>);
+<span class="keyword">var</span> spawn = require(<span class="string">'child_process'</span>).spawn;</pre></div></div>
             
         </li>
         
@@ -134,6 +135,14 @@ Note: we <strong>DO NOT</strong> stream HD videos to save bandwidth.</p>
             
             <div class="content"><div class='highlight'><pre>		<span class="keyword">if</span>(String(stream.type).indexOf(query.type) &gt; -<span class="number">1</span> &amp;&amp; (stream.quality == <span class="string">"large"</span> || stream.quality == <span class="string">"medium"</span> || stream.quality == <span class="string">"small"</span>)){
 			<span class="keyword">return</span> <span class="keyword">function</span>(res){
+				<span class="comment">/* Enable Real-time audio conversion by uncomment the line below (requires ffmpeg!) */</span>
+				<span class="comment">/*if(!!query.audio){
+					var ffmpeg = spawn('ffmpeg',['-i','-','-vn','-ac',2,'-ar',44100,'-ab','128k','-f','mp3','-']);
+					var video = request(stream.url+'&amp;signature='+stream.sig);
+					video.pipe(ffmpeg.stdin);
+					ffmpeg.stdout.pipe(res);
+					return;
+				}*/</span>
 				request(stream.url+<span class="string">'&amp;signature='</span>+stream.sig).pipe(res);
 			};
 		}
