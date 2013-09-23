@@ -6,6 +6,7 @@
 //Require the libraries needed.
 var m3u8 = require('m3u8');
 var request = require('request');
+var options = require('./options.js');
 
 //Here's our live stream handler.
 //Currently only works with finished live streams
@@ -53,8 +54,13 @@ module.exports = function(data,res){
 		//to save bandwidth
 		if(parseInt(quality[0]) < 1280 && parseInt(quality[1]) < 720 && !playlist){
 			playlist = String(item.get('uri'));
-			//Start streaming
-			stream();
+			if(options.liveStreaming){
+				//Start streaming
+				stream();
+			}
+			else {
+				res.end('Live broadcast streaming not allowed.');
+			}
 		}
 	});
 };
