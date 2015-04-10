@@ -6,11 +6,10 @@
 //Require the libraries needed.
 var request = require('request');
 var qs = require('querystring');
-var options = require('./options.js');
 var spawn = require('child_process').spawn;
 
 //Here's our normal stream handler.
-module.exports = function(query,data){
+module.exports = function(query, data, options){
 	//Get the streams from the API response
 	var streams = String(data.url_encoded_fmt_stream_map).split(',');
 	//Loop througn all streams

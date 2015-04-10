@@ -6,11 +6,10 @@
 //Require the libraries needed.
 var m3u8 = require('m3u8');
 var request = require('request');
-var options = require('./options.js');
 
 //Here's our live stream handler.
 //Currently only works with finished live streams
-module.exports = function(data,res){
+module.exports = function(data, res, options){
 	//Create a M3U parser instance.
 	//YouTube lists all possible streams in a M3U container.
 	var parser = m3u8.createStream();
